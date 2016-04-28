@@ -1,11 +1,8 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use HTTP::Tiny;
-use JSON;
 use Getopt::Long;
 use File::Basename;
-use Time::HiRes;
 use FindBin qw($RealBin);
 use lib "$RealBin/lib/dapPerlGenomicLib";
 use EnsemblRestQuery;
