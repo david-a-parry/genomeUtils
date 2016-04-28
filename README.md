@@ -12,7 +12,7 @@ Instructions for running each script should be provided by their own usage infor
 
 Currently only two scripts are present: 
     
-    coordinatesFromGenes.pl (documentation required)
-    dnaFromCoordinates.pl
+ * coordinatesFromGenes.pl (documentation required)
+ * dnaFromCoordinates.pl
 
 
