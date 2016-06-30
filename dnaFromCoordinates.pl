@@ -7,12 +7,6 @@ use FindBin qw($RealBin);
 use lib "$RealBin/lib/dapPerlGenomicLib";
 use EnsemblRestQuery;
 
-my %servers = 
-(
-    GRCh38 => "http://rest.ensembl.org", 
-    GRCh37 => "http://grch37.rest.ensembl.org"
-);
-
 my $build = "GRCh38";
 my %opts = (s => 'human', l => 60);
 GetOptions
