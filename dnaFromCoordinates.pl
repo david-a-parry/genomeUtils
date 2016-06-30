@@ -21,6 +21,7 @@ GetOptions
     'h|help',
     'g|grch37',
     'l|line_length=i',
+    'f|flanks=i',
     's|species=s',
 ) or usage("Syntax error!\n");
 
@@ -38,8 +39,17 @@ while (my $region = shift){
 
 sub dnaFromRegion{
     my $region = shift;
-    if ($region !~ /\:-?1$/){
+    my $strand = "1";
+    if ($region =~ /\:(-?1)$/){
+        $strand =  $1;
+    }else{
         $region .= ':1';
+    }
+    if ($opts{f}){
+        my @spl = split(/[:\-]/, $region); 
+        $spl[1] -= $opts{f};
+        $spl[2] += $opts{f};
+        $region = "$spl[0]:$spl[1]-$spl[2]:$strand";
     }
     my $endpoint =  "/sequence/region/$opts{s}/$region";
     my $seq = $restQuery->queryEndpoint($endpoint);
@@ -51,6 +61,12 @@ sub dnaFromRegion{
  
 sub printDna{
     my $dna = shift;
+    if ($opts{f}){
+        my $s = lc(substr($dna, 0, $opts{f})); 
+        $s .= uc(substr($dna, $opts{f}, length($dna) - 2 * $opts{f})); 
+        $s .= lc(substr($dna, length($dna) - $opts{f})); 
+        $dna = $s;
+    }
     if ($opts{l}){
         for (my $i = 0; $i < length($dna); $i += $opts{l}){
             if (length($dna) > $i + $opts{l}){
@@ -77,12 +93,17 @@ Options:
     -g, --grch37
         Use the GRCh37 REST server instead of the default
 
-    -s, --species
+    -s, --species STRING
         Retrieve DNA for this species (default = human)
     
-    -l,  --line_length
+    -l,  --line_length INT
         Length of sequence lines in output. Default = 60. 
         Set to 0 to output DNA as a single line.
+
+    -f,  --flanks INT
+        Number of bases to add either side of the target region.
+        Target bases will be in upper case while flanking bases 
+        will be in lower case.
 
     -h, --help
         Show this message and exit
@@ -107,6 +128,9 @@ Examples:
 
     $exe 1:100000-100200 -g 
     (Retrieve DNA from human GRCh37)
+
+    $exe 1:100000-100200 -f 50 
+    (Get DNA for the flanking 50 bp as well)
 
     $exe 1:100000-100200 -l 100
     (Output lines of 100 letters in length)
