@@ -20,7 +20,7 @@ GetOptions
 ) or usage("Syntax error!\n");
 
 usage() if $opts{h};
-usage("No sequence provided!") if not @ARGV;
+usage("No coordinates provided!") if not @ARGV;
 
 my $restQuery = new EnsemblRestQuery();
 if ($opts{g}){
