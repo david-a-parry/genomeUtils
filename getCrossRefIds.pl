@@ -68,6 +68,9 @@ outputIds();
 
 #########################################################
 sub outputIds{
+    if (not @cross_ref){
+        die "No IDs found!\n";
+    }
     if (not @db){
         outputAllDb();
     }else{
@@ -192,6 +195,7 @@ sub recordIds{
 sub getTranscriptDetails{
     my $id = shift;
     my @trans_hash = ();
+    my @lookups = ();
     if ($id_parser->get_isEnsemblId()){
         if ( $id_parser->get_isTranscript() ){
             push @trans_hash, $restQuery->lookUpEnsId($id, 1);
@@ -223,7 +227,6 @@ sub getTranscriptDetails{
         }
         my $gene = $restQuery->getGeneViaXreg($id, $opts{s});
         if (ref $gene eq 'ARRAY'){
-            my @lookups = ();
             foreach my $ge (@$gene){
                 if ($ge->{id}){
                     my $ge_hash = $restQuery->lookUpEnsId($ge->{id}, 1);
@@ -241,6 +244,14 @@ sub getTranscriptDetails{
                     @trans_hash = transcriptsFromGeneHash($lookups[0]);
                 }
             }
+        }
+    }
+    if (not @trans_hash and not $opts{q}){
+        print STDERR "WARNING: Could not identify any transcripts for ID \"$id\"\n";
+        if (@lookups){
+            my $idstring = join("\n", map { $_->{display_name} } @lookups );
+            print STDERR "Identified the following non-matching display names:\n".
+                         "$idstring\n";
         }
     }
     return @trans_hash;
