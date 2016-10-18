@@ -108,7 +108,7 @@ sub outputUserDb{
         @db,
     ) . "\n";
     foreach my $c (@cross_ref){
-        print join("\t", map {$c->{$_} || "." } "id", "display_name", sort  @db) . "\n";
+        print join("\t", map {$c->{$_} || "." } "id", "display_name", @db) . "\n";
     }
 }
 
