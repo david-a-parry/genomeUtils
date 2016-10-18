@@ -225,8 +225,6 @@ sub get_region_from_gene{
     return $r;
 }
 
-#!/usr/bin/env perl
-
 =head1 NAME
 
 coordinatesFromGenes.pl - retrieve genomic coordinates for given genes
