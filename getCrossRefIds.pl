@@ -213,7 +213,7 @@ sub getTranscriptDetails{
             }
             @trans_hash = @$transcript;
         }else{
-            if (not $opts{s}){
+            if (not $opts{q}){
                 print STDERR "WARNING: No transcript identified for ID \"$id\"\n";
             }
         }
@@ -281,7 +281,7 @@ sub getGeneDetails{
                 $gene_hash = geneFromEnst($tr->{id});
             }
         }else{
-            if (not $opts{s}){
+            if (not $opts{q}){
                 print STDERR "WARNING: No transcript identified for ID \"$id\"\n";
             }
         }
