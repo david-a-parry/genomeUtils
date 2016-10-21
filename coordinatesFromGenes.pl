@@ -58,7 +58,7 @@ if (not @gene_ids){
 
 my @regions = ();
 foreach my $g (@gene_ids){
-    my $region = get_region_from_gene($g);
+    my $region = getRegionFromGene($g);
     push @regions, $region if defined $region;
 }
 
@@ -112,98 +112,10 @@ foreach my $r (@regions){
 }
 
 #########################################################
-sub geneFromEnst{
+sub getRegionFromGene{
     my $id = shift;
-    if (not $opts{q}){
-        print STDERR "Identifying parent gene from Ensembl transcript $id...\n";
-    }
-    return $restQuery->getParent($id, 1);
-}
-
-#########################################################
-sub geneFromEnsp{
-    my $id = shift;
-    if (not $opts{q}){
-        print STDERR "Identifying parent gene from Ensembl protein $id...\n";
-    }
-    my $par = $restQuery->getParent($id);
-    if ($par){
-        if (exists $par->{id}){
-            return geneFromEnst($par->{id});
-        }
-    }
-}
-
-
-#########################################################
-sub get_region_from_gene{
-    my $id = shift;
-    $id_parser->parseId($id);
-    my $gene_hash; 
-    my @lookups = ();
-    if (not $opts{q}){
-        print STDERR "Interpretting ID \"$id\" as of type \"" . 
-          $id_parser->get_identifierType() . "\"...\n";
-    }
-    if ($id_parser->get_isEnsemblId()){
-        if ( $id_parser->get_isTranscript() ){
-            $gene_hash = geneFromEnst($id);
-        }elsif( $id_parser->get_isProtein() ) {
-            $gene_hash = geneFromEnsp($id);
-        }else{
-            $gene_hash = $restQuery->lookUpEnsId($id, 1);
-        }
-    }elsif($id_parser->get_isTranscript()  or $id_parser->get_isProtein() ) {
-        if (not $opts{q}){
-            print STDERR "Identifying Ensembl gene via transcript cross-reference...\n";
-        }
-        my $transcript = $restQuery->getTranscriptViaXreg($id, $opts{s});
-        if ($transcript and ref $transcript eq 'ARRAY'){
-            if (@$transcript > 1){
-                print STDERR "WARNING: Multiple transcripts identified by ".
-                  "cross-reference search for $id - picking the first.\n";
-            }
-            my $tr = $transcript->[0];
-            if (exists $tr->{id}){
-                $gene_hash = geneFromEnst($tr->{id});
-            }
-        }else{
-            if (not $opts{s}){
-                print STDERR "WARNING: No transcript identified for ID \"$id\"\n";
-            }
-        }
-    }else{
-        if (not $opts{q}){
-            print STDERR "Identifying Ensembl gene via gene cross-reference...\n";
-        }
-        my $gene = $restQuery->getGeneViaXreg($id, $opts{s});
-        if (ref $gene eq 'ARRAY'){
-            foreach my $ge (@$gene){
-                if ($ge->{id}){
-                    my $ge_hash = $restQuery->lookUpEnsId($ge->{id}, 1);
-                    if (uc($ge_hash->{display_name}) eq uc($id)){
-                    #if gene symbol matches then we use this entry
-                        $gene_hash = $ge_hash;
-                        last;
-                    }else{
-                        push @lookups, $ge_hash;
-                    }
-                }
-            }
-            if (not $gene_hash){
-                if (@lookups == 1){
-                    $gene_hash = $lookups[0];
-                }
-            }
-        }
-    }
+    my $gene_hash = $restQuery->getGeneDetails($id, $opts{s});
     if (not $gene_hash){
-        print STDERR "WARNING: Could not identify gene for ID \"$id\"\n";
-        if (@lookups){
-            my $idstring = join("\n", map { $_->{display_name} } @lookups );
-            print STDERR "Identified the following non-matching display names:\n".
-                         "$idstring\n";
-        }
         return;
     }
     my $strand = $gene_hash->{strand} > 0 ? "+" : "-";
