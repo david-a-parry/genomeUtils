@@ -10,9 +10,9 @@ To start using these scripts you need to clone this repository and submodules as
 
 Instructions for running each script should be provided by their own usage information accessible by running with '-h' flag. 
 
-Currently only three scripts are present: 
+The following scripts are provided: 
     
  * coordinatesFromGenes.pl 
  * dnaFromCoordinates.pl
  * getCrossRefIds.pl
-
+ * getSeqFromId.pl
