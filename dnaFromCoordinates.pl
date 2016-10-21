@@ -31,6 +31,7 @@ while (my $region = shift){
     dnaFromRegion($region);
 }
 
+#########################################################
 sub dnaFromRegion{
     my $region = shift;
     my $strand = "1";
@@ -53,6 +54,7 @@ sub dnaFromRegion{
     }
 }
  
+#########################################################
 sub printDna{
     my $dna = shift;
     if ($opts{f}){
@@ -75,6 +77,7 @@ sub printDna{
     }
 }
 
+#########################################################
 sub usage{
     my $msg = shift;
     print "\n$msg\n" if $msg;
