@@ -161,7 +161,7 @@ getSeqFromId.pl - retrieve IDs for given genes
 
 =head1 SYNOPSIS
  
-        getSeqFromId.pl -g ABCD1 
+        getSeqFromId.pl -i ABCD1 
         getSeqFromId.pl -l gene_list.txt 
         getSeqFromId.pl -h (display help message)
         getSeqFromId.pl -m (display manual page)
