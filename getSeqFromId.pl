@@ -115,7 +115,17 @@ sub getSeq{
         return;
     }
     my $endpoint =  "/sequence/id/$ensid?multiple_sequences=1";
-    $endpoint .= ";type=$opts{t}" if $opts{t};
+    if( $opts{t} ){
+        $endpoint .= ";type=$opts{t}" 
+    }elsif($id_parser->get_isTranscript() ){
+    #Ensembl default behaviour is to get genomic sequence for transcript
+    # which is a little counter-intuitive - make default type cDNA if transcript
+        if ($id_parser->get_identifierType() eq "CCDS ID"){
+            $endpoint .= ";type=cds";
+        }else{
+            $endpoint .= ";type=cdna";
+        }
+    }
     my $seq = $restQuery->queryEndpoint($endpoint);
     if ($seq){
         foreach my $s (@$seq){
