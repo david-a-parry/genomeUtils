@@ -15,4 +15,4 @@ The following scripts are provided:
  * coordinatesFromGenes.pl 
  * dnaFromCoordinates.pl
  * getCrossRefIds.pl
- * getSeqFromId.pl
+ * seqFromId.pl
