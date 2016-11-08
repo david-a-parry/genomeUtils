@@ -11,10 +11,10 @@ use EnsemblRestQuery;
 use IdParser;
 
 my $restQuery = new EnsemblRestQuery();
-my @gene_ids = ();
+my @ids = ();
 my %opts = 
 (
-    g => \@gene_ids,
+    i => \@ids,
     s => "human",
     n => 60,
 );
@@ -23,7 +23,7 @@ GetOptions
     \%opts,
     'l|list=s',
     'n|line_length=i',
-    'g|gene_ids=s{,}',
+    'i|ids=s{,}',
     's|species=s',
     'r|grch37',
     't|type=s',
@@ -35,9 +35,9 @@ pod2usage( -verbose => 1 ) if ($opts{h});
 
 pod2usage
 (
-     -message => "ERROR: Either -l/--list or -g/--gene_ids argument is required.\n", 
+     -message => "ERROR: Either -l/--list or -i/--ids argument is required.\n", 
      -exitval => 2 
-) if ( not $opts{l} and not @gene_ids);
+) if ( not $opts{l} and not @ids);
 
 checkType();
 
@@ -46,19 +46,19 @@ if ($opts{r}){
 }
 
 if ($opts{l}){
-    open (my $GENES, $opts{l}) or die "Could not open --gene_list '$opts{l}' for reading: $!\n";
+    open (my $GENES, $opts{l}) or die "Could not open -list '$opts{l}' for reading: $!\n";
     while (my $line = <$GENES>){
         my @s = split(/\s+/, $line); 
-        push @gene_ids, $s[0];
+        push @ids, $s[0];
     }
 }
-if (not @gene_ids){
+if (not @ids){
     die "No gene IDs identified!\n";
 }
 
 my @cross_ref = ();
 my %dbs       = ();
-foreach my $g (@gene_ids){
+foreach my $g (@ids){
     getSeq($g);
 }
 
@@ -172,7 +172,7 @@ getSeqFromId.pl - retrieve IDs for given genes
 
 =over 8
 
-=item B<-g    --gene_ids>
+=item B<-i    --ids>
 
 One or more gene symbols or IDs to search and retrieve IDs for.
 
