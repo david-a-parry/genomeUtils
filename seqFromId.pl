@@ -157,14 +157,14 @@ sub printDna{
 
 =head1 NAME
 
-getSeqFromId.pl - retrieve IDs for given genes
+seqFromId.pl - retrieve IDs for given genes
 
 =head1 SYNOPSIS
  
-        getSeqFromId.pl -i ABCD1 
-        getSeqFromId.pl -l gene_list.txt 
-        getSeqFromId.pl -h (display help message)
-        getSeqFromId.pl -m (display manual page)
+        seqFromId.pl -i ABCD1 
+        seqFromId.pl -l gene_list.txt 
+        seqFromId.pl -h (display help message)
+        seqFromId.pl -m (display manual page)
 
 =cut
 
