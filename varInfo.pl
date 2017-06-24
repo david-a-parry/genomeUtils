@@ -132,10 +132,10 @@ Show this script's manual page.
  varInfo.pl -v rs1111
  #get info for human dbSNP variant rs1111
 
- coordinatesFromGenes.pl -v rs48520904  -s mouse
+ varInfo.pl -v rs48520904  -s mouse
  #get info for mouse dbSNP variant rs48520904
 
- coordinatesFromGenes.pl -l var_list.txt
+ varInfo.pl -l var_list.txt
  #get information for a list of human variant IDs
 
  
