@@ -29,12 +29,13 @@ GetOptions
     'j|join_regions',
     'q|quiet',
     'x|sort_regions',
+    'f|flanks=i',
     'h|?|help',
     'm|manual',
 ) or pod2usage( -message => "Syntax error.", -exitval => 2 );
 pod2usage( -verbose => 2 ) if ($opts{m});
 pod2usage( -verbose => 1 ) if ($opts{h});
-
+$opts{f} ||= 0;
 pod2usage
 (
      -message => "ERROR: Either -l/--list or -g/--gene_ids argument is required.\n", 
@@ -59,6 +60,13 @@ if (not @gene_ids){
 my @regions = ();
 foreach my $g (@gene_ids){
     my $region = getRegionFromGene($g);
+    if ($opts{f}){
+        my @bed = split("\t", $region);
+        $bed[1] -= $opts{f};
+        $bed[1] = $bed[1] >= 0 ? $bed[1] : 0;
+        $bed[2] += $opts{f};
+        $region = join("\t", @bed); 
+    }
     push @regions, $region if defined $region;
 }
 
@@ -181,6 +189,10 @@ Use this flag to sort regions in coordinate order in the output.
 =item B<-j    --join_regions>
 
 Use this flag to merge overlapping regions in the output. Output will also be sorted.
+
+=item B<-f    --flanks>
+
+Add this many bp to either side of each region.
 
 =item B<-q    --quiet>
 
