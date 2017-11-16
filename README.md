@@ -2,7 +2,7 @@
 
 Scripts for performing simple yet tedious tasks such as retrieving gene coordinates or DNA sequences.
 
-##Getting started
+## Getting started
 
 To start using these scripts you need to clone this repository and submodules as follows:
 
@@ -12,6 +12,7 @@ The following scripts are provided:
     
  * coordinatesFromGenes.pl 
  * dnaFromCoordinates.pl
+ * genesOverlappingCoordinates.pl
  * getCrossRefIds.pl
  * seqFromId.pl
  * varInfo.pl
