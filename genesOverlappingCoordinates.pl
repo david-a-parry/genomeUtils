@@ -25,6 +25,7 @@ GetOptions
     's|species=s',
     'r|grch37',
     'f|flanks=i',
+    'n|no_coordinates',
     'h|?|help',
     'm|manual',
 ) or pod2usage( -message => "Syntax error.", -exitval => 2 );
@@ -55,8 +56,14 @@ checkCoords();
 
 foreach my $c (@coords){
     my $genes = getGenesFromCoords($c);
-    $genes ||= 'Not Found';
-    print "$c\t$genes\n";  
+    if ($opts{n}){
+        $genes =~ s/\|/\t/g;
+        $genes =~ s/\,/\n/g;
+        print "$genes\n";
+    }else{
+        $genes ||= 'Not Found';
+        print "$c\t$genes\n";
+    }
 }
 
 #########################################################
@@ -129,6 +136,11 @@ One or more intervals to retrieve overlapping genes from in the format 'chr1:100
 =item B<-l    --list>
 
 A list of coordinates to use instead of or in conjunction with -c/--coords.
+
+=item B<-n    --no_coordinates>
+
+Use this flag to output a list of gene IDs and symbols without the input 
+coordinates.
 
 =item B<-s    --species>
 
