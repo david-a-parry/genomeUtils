@@ -74,7 +74,7 @@ sub getGenesFromCoords{
     my %ids = ();
     foreach my $g (@$genes){
         my $id = $g->{id};
-        my $sy = $g->{external_name};
+        my $sy = $g->{external_name} || "N/A";
         $ids{"$id|$sy"} = undef;
     }
     return join(",", sort keys %ids);
